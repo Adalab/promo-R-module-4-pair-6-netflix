@@ -12,11 +12,16 @@ server.use(express.json());
 
 // init express aplication
 const serverPort = 4000;
+server.get("/movie/:movieId", (req, res) => {
+  console.log(req.params);
+  const foundMovie = movies.find((movies) => movies.id === req.params.movieId);
+  console.log(foundMovie);
+});
 
 server.get("/movies", (req, res) => {
   console.log(req);
-  const query = db.prepare("SELECT * FROM movies gender = ? ");
-  const list = query.get();
+  /*  const query = db.prepare("SELECT * FROM movies gender=?");
+  const list = query.get(); */
   res.json({ success: true, movies });
 });
 
