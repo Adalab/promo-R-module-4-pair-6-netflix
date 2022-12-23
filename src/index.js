@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const movies = require("../web/src/data/movies.json");
 const users = require("../web/src/data/users.json");
+const DataBase = require("better-sqlite3");
+const db = new DataBase("./src/db/movies.db", {});
 
 // create and config server
 const server = express();
@@ -13,6 +15,8 @@ const serverPort = 4000;
 
 server.get("/movies", (req, res) => {
   console.log(req);
+  const query = db.prepare("SELECT * FROM movies gender = ? ");
+  const list = query.get();
   res.json({ success: true, movies });
 });
 
