@@ -9,6 +9,7 @@ const db = new DataBase("./src/db/movies.db", {});
 const server = express();
 server.use(cors());
 server.use(express.json());
+server.set("view engine", "ejs");
 
 // init express aplication
 const serverPort = 4000;
@@ -17,6 +18,7 @@ server.get("/movie/:movieId", (req, res) => {
   console.log(req.params);
   const foundMovie = movies.find((movies) => movies.id === req.params.movieId);
   console.log(foundMovie);
+  res.render("movies", foundMovie);
 });
 
 server.get("/movies", (req, res) => {
@@ -71,7 +73,7 @@ server.post("/login", (req, res) => {
   if (findUser !== undefined) {
     const responseSucces = {
       success: true,
-      userId: "id_de_la_usuaria_encontrada",
+      userId: findUser.id,
     };
     res.json(responseSucces);
   } else {

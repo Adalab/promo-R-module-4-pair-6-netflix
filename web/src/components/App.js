@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import ls from "../services/local-storage";
 // components
 import Header from "./Header";
 import AllMovies from "./AllMovies";
@@ -14,7 +15,7 @@ import router from "../services/router";
 
 const App = () => {
   // state: user
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState(ls.get("userId", ""));
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -83,6 +84,7 @@ const App = () => {
     apiUser.sendLoginToApi(loginData).then((response) => {
       if (response.success === true) {
         setUserId(response.userId);
+        ls.set("userId", userId);
         // Si la usuaria introduce bien sus datos redireccionamos desde la página de login al inicio de la página
         router.redirect("/");
       } else {
