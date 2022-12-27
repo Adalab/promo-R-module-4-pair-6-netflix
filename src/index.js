@@ -20,7 +20,6 @@ server.get("/movie/:movieId", (req, res) => {
 });
 
 server.get("/movies", (req, res) => {
-  console.log(req.query);
   const genderFilterParam = req.query.gender;
   const sortFilterParam = req.query.sort;
   const filterGender = movies.filter(
@@ -64,7 +63,24 @@ server.get("/movies", (req, res) => {
 
 server.post("/login", (req, res) => {
   console.log(req.body);
-  res.json({ success: true, users });
+  const email = req.body.email;
+  const password = req.body.password;
+  const findUser = users.find(
+    (eachUser) => eachUser.email === email && eachUser.password === password
+  );
+  if (findUser !== undefined) {
+    const responseSucces = {
+      success: true,
+      userId: "id_de_la_usuaria_encontrada",
+    };
+    res.json(responseSucces);
+  } else {
+    const responseFalse = {
+      success: false,
+      errorMessage: "Usuaria/o no encontrada/o",
+    };
+    res.json(responseFalse);
+  }
 });
 
 server.listen(serverPort, () => {
