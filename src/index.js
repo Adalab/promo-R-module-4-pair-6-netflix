@@ -12,6 +12,7 @@ server.use(express.json());
 
 // init express aplication
 const serverPort = 4000;
+
 server.get("/movie/:movieId", (req, res) => {
   console.log(req.params);
   const foundMovie = movies.find((movies) => movies.id === req.params.movieId);
@@ -19,10 +20,24 @@ server.get("/movie/:movieId", (req, res) => {
 });
 
 server.get("/movies", (req, res) => {
-  console.log(req);
+  console.log(req.query);
+  const genderFilterParam = req.query.gender;
+  const filterGender = movies.filter(
+    (gender) => gender.gender === genderFilterParam
+  );
+  if (genderFilterParam === "") {
+    debugger;
+    const response = { success: true, movies };
+    res.json(response);
+  } else {
+    const response = { success: true, movies: filterGender };
+    res.json(response);
+  }
+
+  console.log(filterGender);
+
   /*  const query = db.prepare("SELECT * FROM movies gender=?");
   const list = query.get(); */
-  res.json({ success: true, movies });
 });
 
 server.post("/login", (req, res) => {
