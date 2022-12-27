@@ -22,9 +22,11 @@ server.get("/movie/:movieId", (req, res) => {
 server.get("/movies", (req, res) => {
   console.log(req.query);
   const genderFilterParam = req.query.gender;
+  const sortFilterParam = req.query.sort;
   const filterGender = movies.filter(
     (gender) => gender.gender === genderFilterParam
   );
+
   if (genderFilterParam === "") {
     debugger;
     const response = { success: true, movies };
@@ -33,8 +35,28 @@ server.get("/movies", (req, res) => {
     const response = { success: true, movies: filterGender };
     res.json(response);
   }
-
   console.log(filterGender);
+  if (sortFilterParam === "asc") {
+    filterGender.sort((a, b) => {
+      if (a.name == b.name) {
+        return 0;
+      }
+      if (a.name < b.name) {
+        return -1;
+      }
+      return 1;
+    });
+  } else {
+    filterGender.sort((a, b) => {
+      if (a.name == b.name) {
+        return 0;
+      }
+      if (a.name > b.name) {
+        return -1;
+      }
+      return 1;
+    });
+  }
 
   /*  const query = db.prepare("SELECT * FROM movies gender=?");
   const list = query.get(); */
