@@ -29,6 +29,15 @@ server.post("/login", (req, res) => {
   console.log(req.body);
   res.json({ success: true, users });
 });
+server.post("/sign-up", (req, res)=>{
+  console.log(req.body);
+  const query = db.prepare('INSERT INTO users (email, password) VALUES (?,?)');
+  const result = query.run(req.body.email, req.body.password);
+  console.log(result);
+  res.json(result);
+
+  
+})
 
 server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
