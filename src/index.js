@@ -20,10 +20,12 @@ server.get("/movie/:movieId", (req, res) => {
 });
 
 server.get("/movies", (req, res) => {
-  console.log(req);
-  /*  const query = db.prepare("SELECT * FROM movies gender=?");
-  const list = query.get(); */
-  res.json({ success: true, movies });
+  console.log(req.query);
+    const query = db.prepare("SELECT * FROM movies");
+  const list = query.all(); 
+  console.log(list)
+  res.json({ success: true, movies:list });
+  
 });
 
 server.post("/login", (req, res) => {
@@ -32,11 +34,28 @@ server.post("/login", (req, res) => {
 });
 server.post("/sign-up", (req, res) => {
   console.log(req.body);
-  const query = dbb.prepare("INSERT INTO users (email, password) VALUES (?,?)");
-  const result = query.run(req.body.email, req.body.password);
+  const query = dbb.prepare("SELECT * FROM users WHERE email = ?");
+  const result = query.get(req.body.email);
   console.log(result);
-  res.json(result);
-});
+  if (result === undefined ){
+    const queryInsert = dbb.prepare("INSERT INTO users (email, password) VALUES (?,?)");
+   const resultInsert = queryInsert.run(req.body.email, req.body.password);
+   console.log(resultInsert);
+   const response = {
+     success: true,
+     userId: resultInsert.lastInsertRowid
+   }
+  res.json(response);
+  } else{
+    const responseError =
+    {
+      success: false,
+      errorMessage: "Usuaria ya existente"
+    }
+    res.json(responseError)
+  };
+
+}); 
 
 server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
