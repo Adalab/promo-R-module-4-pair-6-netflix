@@ -3,7 +3,7 @@ const cors = require("cors");
 const movies = require("../web/src/data/movies.json");
 const users = require("../web/src/data/users.json");
 const DataBase = require("better-sqlite3");
-const db = new DataBase("./src/db/movies.db", {});
+const db = new DataBase("./src/db/movies.db", { verbose: console.log });
 const dbb = new DataBase("./src/db/users.db", {});
 
 // create and config server
@@ -20,12 +20,19 @@ server.get("/movie/:movieId", (req, res) => {
 });
 
 server.get("/movies", (req, res) => {
+<<<<<<< HEAD
   console.log(req.query);
     const query = db.prepare("SELECT * FROM movies");
   const list = query.all(); 
   console.log(list)
   res.json({ success: true, movies:list });
   
+=======
+  console.log(req.query.params);
+  /*  const query = db.prepare("SELECT * FROM movies gender=?");
+  const list = query.get(); */
+  res.json({ success: true, movies });
+>>>>>>> 276d0e60a524db59aaa093d085195e1cb38e15d8
 });
 
 server.post("/login", (req, res) => {
